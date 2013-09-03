@@ -12,9 +12,14 @@ express-phantom middleware tests the request for a Google's _escaped_fragment_ q
 
 	On Ubuntu:
 	```sh
-	sudo apt-get install phantomjs
+	sudo apt-get update
+	sudo apt-get install build-essential chrpath git-core libssl-dev libfontconfig1-dev
+	git clone git://github.com/ariya/phantomjs.git
+	cd phantomjs
+	git checkout 1.9
+	./build.sh
 ```
-    Note: apt-get is having an issue installing recent version of phantomjs.
+    Warning: apt-get is having an issue installing recent version of phantomjs.
 
 2. Add middleware to the express
 
@@ -30,5 +35,6 @@ Default options:
 options = {
     cacheLifetime: 3600*1000
     verbose: false
+    hashPrepend: ''
 }
 ```
