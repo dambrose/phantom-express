@@ -42,10 +42,10 @@ options = {
     // Currently the middleware caches the response from the
     // phantomjs process in the memory. The parameter defines
     // TTL in seconds. If 0 is passed the cache will be ignored.
-    cacheLifetime: 3600*1000
+    cacheLifetime: 600
 
-    // Dump status to the console or not
-    verbose: false
+    // define a redis client object
+    store: null
 
     // Prepends the string to the pretty generated hash
     // ex. if '!' is defined ->  #!/home/page
