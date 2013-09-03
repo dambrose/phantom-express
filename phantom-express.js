@@ -6,7 +6,7 @@
 
   child_process = require('child_process');
 
-  cache = require('memory-cache');
+  cache = require('./memory-cache');
 
   module.exports = middleware = function(options) {
     options = _.assign({
