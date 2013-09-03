@@ -1,7 +1,7 @@
-express-phantom
+phantom-express
 ===============
 
-express-phantom middleware allows for dynamically created content to be visible to Google crawler.
+phantom-express middleware allows for dynamically created content to be visible to Google crawler.
 This middleware tests the request for an ```_escaped_fragment_``` query parameter. If the parameter is detected the middleware passes pretty URL to the phantomjs process.
 
 1. Install phantomjs
