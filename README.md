@@ -42,7 +42,7 @@ options = {
     // Currently the middleware caches the response from the
     // phantomjs process in the memory. The parameter defines
     // TTL in seconds. If 0 is passed the cache will be ignored.
-    cacheLifetime: 3600*1000
+    cacheLifetime: 3600
 
     // Dump status to the console or not
     verbose: false
