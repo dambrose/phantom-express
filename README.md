@@ -4,6 +4,10 @@ phantom-express
 phantom-express middleware allows for dynamically created content to be visible to Google crawler.
 This middleware tests the request for an ```_escaped_fragment_``` query parameter. If the parameter is detected the middleware passes pretty URL to the phantomjs process.
 
+Compatible with ```requirejs```
+
+### How to use it?
+
 1. Install phantomjs
 
 	On mac:
