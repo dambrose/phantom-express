@@ -1,0 +1,14 @@
+{
+  "name": "phantom-express",
+  "version": "0.0.1",
+  "description": "Prepares the dynamic/ajaxed page for Google search engine",
+  "main": "phantom-express",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Andrius Skerla",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "lodash": "~1.3.1"
+  }
+}
