@@ -8,9 +8,9 @@ Compatible with ```requirejs```
 
 ### How to use it?
 
-1. Install phantomjs
+1. Install ```phantomjs```
 
-	On mac:
+	On MAC:
 	```sh
 	brew install phantomjs 
 	```
@@ -24,7 +24,8 @@ Compatible with ```requirejs```
 	git checkout 1.9
 	./build.sh
 ```
-    Warning: ```apt-get``` is having an issue installing recent version of phantomjs. Avoid using ```apt-get install``` phantomjs
+    Warning: ```apt-get``` is having an issue installing recent version of ```phantomjs```. 
+    Avoid using ```apt-get install phantomjs```
 
 2. Add middleware to the express
 
