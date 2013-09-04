@@ -1,70 +1,108 @@
-phantom-express
-===============
+take-a-rest
+===========
 
-phantom-express middleware allows for dynamically created content to be visible to Google crawler.
-This middleware tests the request for an ```_escaped_fragment_``` query parameter. If the parameter is detected the middleware passes pretty URL to the phantomjs process.
+Simple RESTful Express server
 
-Compatible with ```requirejs```
+# How to use it?
 
-### How to use it?
+Preparation:
+```coffeescript
+takeARest = require 'take-a-rest'
+express = require 'express'
+mysql = require 'mysql'
 
-1. Install ```phantomjs```
+pool = mysql.createPool
+  host: 'localhost'
+  user: 'root'
+  password: ''
+  database: 'dbname'
+  
 
-	On MAC:
-	```sh
-	brew install phantomjs 
-	```
+app = express()
+app.use express.bodyParser()
+app.use express.query()
 
-	On Ubuntu:
-	```sh
-	sudo apt-get update
-	sudo apt-get install build-essential chrpath git-core libssl-dev libfontconfig1-dev
-	git clone git://github.com/ariya/phantomjs.git
-	cd phantomjs
-	git checkout 1.9
-	./build.sh
-```
-    Warning: ```apt-get``` is having an issue installing recent version of ```phantomjs```. 
-    Avoid using ```apt-get install phantomjs```
-
-2. Add middleware to the express
-
-	```javascript
-	var phantomExpress = require("phantom-express");
-
-	app.use(express.query())
-	app.use(phantomExpress(options));
-	```
-
-Default options:
-```javascript
-options = {
-    // Currently the middleware caches the response from the
-    // phantomjs process in the memory. The parameter defines
-    // TTL in seconds. If 0 is passed the cache will be ignored.
-    cacheLifetime: 600
-
-    // define a redis client object
-    store: null
-
-    // Prepends the string to the pretty generated hash
-    // ex. if '!' is defined ->  #!/home/page
-    hashPrepend: ''
-}
+restExpress = takeARest(app, pool)
 ```
 
+Usage:
+```coffeescript
+restExpress(options)
+```
+Options:
+```coffeescript
+options = 
+    # Required. The URL where the RESTful service is available
+    url: string
+    
+    # Required. The name of the table in the database to associate with service
+    tableName: string
+    
+    # The pool of MySQL connections.
+    pool: mysql.createPool({})
+    
+    # The fields of the table that the client can access
+    fields: commaSeparatedString
+    
+    # Middleware function. Could be used to control the generated query
+    middleware: function (squelInstance, params, req, options) {}
+    
+    # Whether the request must return only one result
+    # Useful for generating URLs like http://server.com/me
+    single: false
+    
+    # If set to true DELETE method would be skipped
+    forbitDeletes: false
+    
+    # If set to true UPDATE method would be skipped
+    forbidAmmendments: false
+    
+    # If set to true INSERT method would be skipped
+    forbidInserts: false
+```
+
+# Want some examples?
+
+Here you go:
+```coffeescript
+
+# Request: GET /users
+# Returns: id,name and surname of all users in the database
+#
+# Request: GET /users?limit=5&offset=0
+# Returns: id,name and surname of 5 first users in the database
+restExpress
+  url: '/users'
+  tableName: '7_users'
+  fields: 'id,name,surname'
+
+# Request: GET /users/4/projects
+# Returns: id,user_id nad name of all rows from table 7_projects where column user_id equals 4
+#
+# Request: GET /users/4/projects?fields=id
+# Returns: ids of all rows from table 7_projects where column user_id equals 4
+restExpress
+  url: '/users/:user_id/projects'
+  tableName: '7_projects'
+  fields: 'id,user_id,name'
+
+# Request: GET /me/projects
+# Returns: all projects that are associated with currently loggedin user
+restExpress
+  url: '/me/projects'
+  tableName: '7_projects'
+  middleware: (stmt, params, req) ->
+    stmt = stmt.where('user_id = ?')
+    params.push req.session.user_id
+
+```
 
 
-### How it works?
+In the example above each ```restExpress()``` call creates 5 listeners.
 
-
-The middleware detects if the request URL contains ```_escaped_fragment_``` (ex. ```http://mysite.com/some/path?_escaped_fragment_=hello/world```) query parameter. If so, it parses the request url, generates pretty URL with hash fragment (ex. ```http://mysite.com/some/path#hello/world```) and passes it to the phantomjs proccess.
-
-Step by step process:
-* The phantomjs proccess renders the page
-* Evaluates javascript code
-* Waits 5 seconds after last resource has been received (useful for requirejs)
-* Grabs the generated HTML
-* Sends it to the Google crawler
-
-More information at: https://developers.google.com/webmasters/ajax-crawling/docs/specification
+In example, the first one listens to:
+* GET /users
+* GET /users/:id
+* POST /users
+* PUT /users/:id
+* DELETE /users/:id
