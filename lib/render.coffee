@@ -21,6 +21,11 @@ die "no url supplied\n" unless url
 
 # Initialization
 page = webpage.create()
+
+page.viewportSize =
+	width: 1024
+	height: 768
+
 resources = 0
 resourcesTimer = null
 
