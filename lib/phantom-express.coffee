@@ -40,7 +40,7 @@ module.exports = middleware = (options) ->
           res.send 200, stdout
 
     # Cache
-    if options.store
+    if options.store && options.store.ready
       cacheName = 'phantom-' + fullUrl
       options.store.get cacheName, (err, result) ->
         if result
