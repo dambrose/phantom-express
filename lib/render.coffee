@@ -37,7 +37,7 @@ page.onResourceRequested = (request) ->
 page.onResourceReceived = (response) ->
   if --resources is 0
     clearTimeout resourcesTimer if resourcesTimer
-    resourcesTimer = setTimeout done, 5000
+    resourcesTimer = setTimeout done, 2000
 
 
 #page.onConsoleMessage = (msg) -> console.log('Page title is ' + msg)
