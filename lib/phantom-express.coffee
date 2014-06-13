@@ -41,14 +41,14 @@ module.exports = middleware = (options) ->
 
     # Cache
     if options.store && options.store.ready
-      cacheName = url
+      cacheName = 'phantom-' + fullUrl
       options.store.get cacheName, (err, result) ->
         if result
           res.send 200, result
         else
           processDo (data) ->
             options.store.set cacheName, data
-            # options.store.expire cacheName, options.cacheLifetime
+            options.store.expire cacheName, options.cacheLifetime
     else
       processDo()
 
