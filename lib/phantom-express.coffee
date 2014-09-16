@@ -32,9 +32,9 @@ module.exports = middleware = (options) ->
 
     # Render the page
     processDo = (cb) ->
-      child_process.exec "phantomjs --load-images=no #{__dirname}/render.js '#{fullUrl}'", (error, stdout, stderr) ->
+      child_process.exec "phantomjs --load-images=no --ignore-ssl-errors=yes #{__dirname}/render.js '#{fullUrl}'", (error, stdout, stderr) ->
         if error or stderr
-          res.send 500, error || stderr
+          next error || stderr
         else
           cb(stdout) if _.isFunction(cb)
           res.send 200, stdout
