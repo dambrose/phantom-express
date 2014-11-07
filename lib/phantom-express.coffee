@@ -6,7 +6,7 @@ redis = require 'redis'
 
 module.exports = middleware = (options) ->
   options = _.assign({
-    cacheLifetime: 600
+    cacheLifetime: 0
     store: null
     hashPrepend: ''
   }, options)
@@ -37,18 +37,19 @@ module.exports = middleware = (options) ->
           next error || stderr
         else
           cb(stdout) if _.isFunction(cb)
-          res.send 200, stdout
+          res.status(200).send(stdout)
 
     # Cache
     if options.store && options.store.ready
       cacheName = 'phantom-' + fullUrl
       options.store.get cacheName, (err, result) ->
         if result
-          res.send 200, result
+          res.status(200).send(result)
         else
           processDo (data) ->
             options.store.set cacheName, data
-            options.store.expire cacheName, options.cacheLifetime
+            if options.cacheLifetime
+              options.store.expire cacheName, options.cacheLifetime
     else
       processDo()
 
